@@ -1,0 +1,2138 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Kuis 1 Miliar Matematika Kelas 5 SD</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@700;900&family=Montserrat:ital,wght@0,400;0,600;0,700;0,900;1,400&family=Teko:wght@500;700&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --bg-dark: #030712;
+      --bg-radial: radial-gradient(circle at 50% 35%, #0d1e4c 0%, #060e26 50%, #02040b 100%);
+      --cyan-glow: #00e5ff;
+      --blue-border: #1a4cd2;
+      --blue-accent: #0077ff;
+      --gold: #ffb703;
+      --orange-selected: #ff7700;
+      --green-correct: #059669;
+      --red-wrong: #dc2626;
+      --box-bg: linear-gradient(180deg, #0b1a3d 0%, #04091a 100%);
+    }
+
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+      user-select: none;
+      -webkit-user-select: none;
+    }
+
+    body {
+      font-family: 'Montserrat', sans-serif;
+      background: var(--bg-radial);
+      color: #ffffff;
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+      overflow-x: hidden;
+      position: relative;
+    }
+
+    /* Lapisan Background Gambar Arena Kuis */
+    #arena-bg-layer {
+      position: fixed;
+      top: 0; left: 0; width: 100%; height: 100%;
+      background-size: cover;
+      background-position: center;
+      background-repeat: no-repeat;
+      opacity: 0.28;
+      pointer-events: none;
+      z-index: 1;
+      transition: background-image 0.5s ease;
+    }
+
+    body::before {
+      content: '';
+      position: fixed;
+      top: 0; left: 0; width: 100%; height: 100%;
+      background: radial-gradient(ellipse at 50% 15%, rgba(0, 213, 255, 0.18), transparent 70%),
+                  radial-gradient(circle at 10% 90%, rgba(26, 76, 210, 0.15), transparent 50%),
+                  radial-gradient(circle at 90% 90%, rgba(26, 76, 210, 0.15), transparent 50%);
+      pointer-events: none;
+      z-index: 2;
+    }
+
+    header {
+      position: relative;
+      z-index: 10;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 10px 24px;
+      border-bottom: 2px solid rgba(0, 229, 255, 0.2);
+      background: rgba(2, 4, 11, 0.85);
+      backdrop-filter: blur(10px);
+    }
+
+    .logo-container {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+    }
+
+    .custom-icon-img {
+      object-fit: contain;
+      display: inline-block;
+    }
+
+    .logo-badge-img {
+      width: 46px;
+      height: 46px;
+      border-radius: 50%;
+      box-shadow: 0 0 12px rgba(255, 183, 3, 0.6);
+    }
+
+    .logo-title h1 {
+      font-family: 'Teko', sans-serif;
+      font-size: 24px;
+      letter-spacing: 1.5px;
+      text-transform: uppercase;
+      color: #f8fafc;
+      line-height: 1;
+      text-shadow: 0 0 10px rgba(0, 229, 255, 0.5);
+    }
+
+    .student-badge-top {
+      font-size: 12px;
+      color: var(--cyan-glow);
+      font-weight: 600;
+    }
+
+    .top-actions {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+
+    .btn-top {
+      background: rgba(11, 26, 61, 0.8);
+      border: 1px solid var(--cyan-glow);
+      color: #e2e8f0;
+      padding: 6px 12px;
+      border-radius: 6px;
+      font-size: 12px;
+      font-weight: 600;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      gap: 6px;
+    }
+
+    main {
+      position: relative;
+      z-index: 5;
+      flex: 1;
+      display: grid;
+      grid-template-columns: 1fr 310px;
+      gap: 20px;
+      max-width: 1350px;
+      width: 100%;
+      margin: 0 auto;
+      padding: 14px 20px;
+      align-items: stretch;
+    }
+
+    @media (max-width: 980px) {
+      main { grid-template-columns: 1fr; }
+      .money-ladder-container { display: none !important; }
+      #mobile-ladder-btn { display: inline-flex !important; }
+    }
+    #mobile-ladder-btn { display: none; }
+
+    .stage-container {
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+      gap: 16px;
+    }
+
+    .top-controls-row {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      flex-wrap: wrap;
+      gap: 12px;
+    }
+
+    .lifelines-bar {
+      display: flex;
+      align-items: center;
+      gap: 16px;
+      padding: 6px 16px;
+      background: rgba(4, 9, 26, 0.7);
+      border-radius: 50px;
+      border: 1px solid rgba(0, 229, 255, 0.25);
+    }
+
+    .lifeline-btn {
+      width: 54px;
+      height: 54px;
+      border-radius: 50%;
+      border: 2px solid var(--cyan-glow);
+      background: radial-gradient(circle, #0e2a6d 0%, #03081a 100%);
+      color: #ffffff;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      cursor: pointer;
+      position: relative;
+      transition: all 0.25s;
+      box-shadow: 0 0 10px rgba(0, 229, 255, 0.3);
+      padding: 4px;
+    }
+
+    .lifeline-btn img {
+      width: 26px;
+      height: 26px;
+      object-fit: contain;
+    }
+
+    .lifeline-btn span {
+      font-size: 8.5px;
+      font-weight: 700;
+      margin-top: 1px;
+    }
+
+    .lifeline-btn:hover:not(:disabled) {
+      transform: scale(1.08);
+      box-shadow: 0 0 16px rgba(0, 229, 255, 0.8);
+      border-color: #ffffff;
+    }
+
+    .lifeline-btn:disabled {
+      filter: grayscale(100%);
+      opacity: 0.35;
+      cursor: not-allowed;
+      border-color: #64748b;
+    }
+
+    .lifeline-btn:disabled::after {
+      content: '✕';
+      position: absolute;
+      font-size: 34px;
+      color: #ef4444;
+      font-weight: 900;
+    }
+
+    /* Timer Widget */
+    .timer-badge-container {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      background: rgba(4, 9, 26, 0.75);
+      padding: 6px 16px 6px 10px;
+      border-radius: 50px;
+      border: 1px solid rgba(0, 229, 255, 0.3);
+    }
+
+    .timer-circle-wrap {
+      position: relative;
+      width: 48px;
+      height: 48px;
+    }
+
+    .timer-circle-wrap svg {
+      transform: rotate(-90deg);
+      width: 48px;
+      height: 48px;
+    }
+
+    .timer-circle-bg {
+      fill: none;
+      stroke: rgba(255, 255, 255, 0.1);
+      stroke-width: 4;
+    }
+
+    .timer-circle-bar {
+      fill: none;
+      stroke: var(--cyan-glow);
+      stroke-width: 4;
+      stroke-linecap: round;
+      stroke-dasharray: 125.6;
+      stroke-dashoffset: 0;
+      transition: stroke-dashoffset 1s linear, stroke 0.3s;
+    }
+
+    .timer-circle-bar.warning {
+      stroke: #ef4444;
+      animation: timerAlert 0.5s infinite alternate;
+    }
+    @keyframes timerAlert {
+      from { filter: drop-shadow(0 0 2px #ef4444); }
+      to { filter: drop-shadow(0 0 10px #ef4444); }
+    }
+
+    .timer-circle-text {
+      position: absolute;
+      top: 0; left: 0; width: 100%; height: 100%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-family: 'Teko', sans-serif;
+      font-size: 24px;
+      font-weight: 700;
+      color: #ffffff;
+    }
+
+    .timer-label {
+      font-size: 11px;
+      font-weight: 700;
+      color: #94a3b8;
+      text-transform: uppercase;
+    }
+
+    .current-status-banner {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 8px 18px;
+      border-radius: 8px;
+      background: rgba(11, 26, 61, 0.65);
+      border: 1px solid rgba(0, 229, 255, 0.25);
+      backdrop-filter: blur(4px);
+    }
+
+    .status-level {
+      font-size: 13px;
+      font-weight: 700;
+      color: var(--cyan-glow);
+      text-transform: uppercase;
+    }
+
+    .status-prize {
+      font-family: 'Teko', sans-serif;
+      font-size: 30px;
+      font-weight: 700;
+      color: var(--gold);
+      line-height: 1;
+    }
+
+    .qa-section {
+      display: flex;
+      flex-direction: column;
+      gap: 14px;
+      margin-top: auto;
+    }
+
+    .hex-box {
+      position: relative;
+      background: var(--box-bg);
+      border: 2px solid var(--blue-border);
+      border-left: none;
+      border-right: none;
+      padding: 16px 28px;
+      text-align: center;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .hex-box::before, .hex-box::after {
+      content: '';
+      position: absolute;
+      top: -2px;
+      bottom: -2px;
+      width: 20px;
+      background: var(--box-bg);
+      border-top: 2px solid var(--blue-border);
+      border-bottom: 2px solid var(--blue-border);
+    }
+
+    .hex-box::before {
+      left: -11px;
+      transform: skewX(-26deg);
+      border-left: 2px solid var(--blue-border);
+    }
+
+    .hex-box::after {
+      right: -11px;
+      transform: skewX(26deg);
+      border-right: 2px solid var(--blue-border);
+    }
+
+    .question-box {
+      min-height: 100px;
+      font-size: 18px;
+      font-weight: 700;
+      line-height: 1.45;
+      color: #ffffff;
+      text-shadow: 0 2px 4px rgba(0,0,0,0.8);
+      border-color: var(--cyan-glow);
+    }
+    .question-box::before, .question-box::after {
+      border-color: var(--cyan-glow);
+    }
+
+    .answers-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 12px 26px;
+    }
+
+    @media (max-width: 640px) {
+      .answers-grid {
+        grid-template-columns: 1fr;
+        gap: 10px;
+      }
+      .question-box { font-size: 15px; min-height: 80px; }
+    }
+
+    .answer-btn {
+      cursor: pointer;
+      padding: 13px 18px;
+      font-size: 15px;
+      font-weight: 600;
+      color: #e2e8f0;
+      text-align: left;
+      transition: all 0.2s ease;
+      display: flex;
+      align-items: center;
+      outline: none;
+    }
+
+    .answer-letter {
+      color: var(--gold);
+      font-weight: 900;
+      font-size: 17px;
+      margin-right: 12px;
+    }
+
+    .answer-text { flex: 1; }
+
+    .answer-btn:hover:not(:disabled) {
+      border-color: #ffffff !important;
+      box-shadow: 0 0 14px var(--cyan-glow);
+      color: #ffffff;
+    }
+    .answer-btn:hover:not(:disabled)::before,
+    .answer-btn:hover:not(:disabled)::after {
+      border-color: #ffffff !important;
+    }
+
+    .answer-btn.selected {
+      background: linear-gradient(180deg, #ff8c00 0%, #cc5500 100%) !important;
+      border-color: #fff275 !important;
+      color: #ffffff !important;
+      box-shadow: 0 0 25px rgba(255, 140, 0, 0.9) !important;
+    }
+    .answer-btn.selected::before, .answer-btn.selected::after {
+      background: linear-gradient(180deg, #ff8c00 0%, #cc5500 100%) !important;
+      border-color: #fff275 !important;
+    }
+
+    .answer-btn.blinking {
+      animation: suspenseBlink 0.35s infinite alternate ease-in-out;
+    }
+    @keyframes suspenseBlink {
+      from { opacity: 1; }
+      to { opacity: 0.35; }
+    }
+
+    .answer-btn.correct {
+      background: linear-gradient(180deg, #10b981 0%, #047857 100%) !important;
+      border-color: #6ee7b7 !important;
+      color: #ffffff !important;
+      box-shadow: 0 0 28px rgba(16, 185, 129, 0.95) !important;
+    }
+    .answer-btn.correct::before, .answer-btn.correct::after {
+      background: linear-gradient(180deg, #10b981 0%, #047857 100%) !important;
+      border-color: #6ee7b7 !important;
+    }
+
+    .answer-btn.wrong {
+      background: linear-gradient(180deg, #ef4444 0%, #991b1b 100%) !important;
+      border-color: #fca5a5 !important;
+      color: #ffffff !important;
+      box-shadow: 0 0 25px rgba(239, 68, 68, 0.9) !important;
+    }
+    .answer-btn.wrong::before, .answer-btn.wrong::after {
+      background: linear-gradient(180deg, #ef4444 0%, #991b1b 100%) !important;
+      border-color: #fca5a5 !important;
+    }
+
+    .answer-btn.hidden-option {
+      visibility: hidden;
+      pointer-events: none;
+    }
+
+    .final-answer-panel {
+      display: none;
+      background: rgba(3, 7, 18, 0.95);
+      border: 2px solid var(--orange-selected);
+      padding: 10px 18px;
+      border-radius: 8px;
+      text-align: center;
+      animation: fadeIn 0.3s ease;
+    }
+    .final-answer-panel p {
+      font-size: 14px;
+      font-weight: 700;
+      color: #fed7aa;
+      margin-bottom: 8px;
+      text-transform: uppercase;
+    }
+    .final-btn-group {
+      display: flex;
+      justify-content: center;
+      gap: 14px;
+    }
+    .btn-action-lock {
+      background: linear-gradient(180deg, #ff7700 0%, #b45309 100%);
+      color: #ffffff;
+      border: none;
+      padding: 7px 22px;
+      border-radius: 4px;
+      font-weight: 700;
+      cursor: pointer;
+      font-size: 13px;
+    }
+    .btn-action-cancel {
+      background: #334155;
+      color: #f1f5f9;
+      border: none;
+      padding: 7px 16px;
+      border-radius: 4px;
+      font-weight: 600;
+      cursor: pointer;
+      font-size: 13px;
+    }
+
+    .edu-explain-card {
+      display: none;
+      background: #09132e;
+      border: 1px solid var(--cyan-glow);
+      padding: 12px 18px;
+      border-radius: 8px;
+      margin-top: 8px;
+    }
+    .edu-explain-card h4 {
+      color: var(--cyan-glow);
+      font-size: 12px;
+      text-transform: uppercase;
+      margin-bottom: 4px;
+    }
+    .edu-explain-card p {
+      font-size: 13px;
+      color: #e2e8f0;
+      line-height: 1.4;
+    }
+    .edu-explain-card button {
+      margin-top: 8px;
+      background: var(--blue-accent);
+      border: none;
+      color: #ffffff;
+      padding: 7px 18px;
+      border-radius: 4px;
+      font-weight: 700;
+      cursor: pointer;
+      font-size: 12px;
+      float: right;
+    }
+
+    .money-ladder-container {
+      background: rgba(3, 7, 24, 0.85);
+      border: 2px solid rgba(0, 229, 255, 0.3);
+      border-radius: 12px;
+      padding: 10px;
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+      backdrop-filter: blur(5px);
+    }
+
+    .ladder-title {
+      font-family: 'Teko', sans-serif;
+      font-size: 20px;
+      letter-spacing: 2px;
+      text-align: center;
+      color: var(--cyan-glow);
+      border-bottom: 1px solid rgba(0, 229, 255, 0.25);
+      padding-bottom: 4px;
+      margin-bottom: 4px;
+    }
+
+    .ladder-list {
+      list-style: none;
+      display: flex;
+      flex-direction: column;
+      gap: 2px;
+    }
+
+    .ladder-step {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 2.5px 10px;
+      font-size: 12px;
+      font-weight: 600;
+      border-radius: 4px;
+      color: #ff9800;
+    }
+
+    .ladder-step .step-num {
+      width: 24px;
+      font-weight: 700;
+      color: #64748b;
+    }
+
+    .ladder-step.milestone {
+      color: #ffffff;
+      font-weight: 800;
+      background: rgba(255, 255, 255, 0.06);
+    }
+    .ladder-step.milestone .step-num { color: #ffffff; }
+
+    .ladder-step.jackpot {
+      color: var(--gold);
+      font-weight: 900;
+      font-size: 13px;
+    }
+    .ladder-step.jackpot .step-num { color: var(--gold); }
+
+    .ladder-step.active {
+      background: linear-gradient(90deg, #ff7700 0%, #b45309 100%);
+      color: #ffffff !important;
+      box-shadow: 0 0 10px rgba(255, 119, 0, 0.9);
+      transform: scale(1.02);
+    }
+    .ladder-step.active .step-num { color: #ffffff; }
+
+    .ladder-step.passed { color: #4ade80; }
+    .ladder-step.passed .step-num { color: #22c55e; }
+
+    .walk-away-btn {
+      margin-top: 6px;
+      background: rgba(220, 38, 38, 0.15);
+      border: 1px solid #ef4444;
+      color: #fca5a5;
+      padding: 7px;
+      border-radius: 6px;
+      font-size: 11px;
+      font-weight: 700;
+      cursor: pointer;
+      text-align: center;
+      transition: all 0.2s;
+    }
+    .walk-away-btn:hover {
+      background: #ef4444;
+      color: #ffffff;
+    }
+
+    /* Modals */
+    .modal-backdrop {
+      position: fixed;
+      top: 0; left: 0; right: 0; bottom: 0;
+      background: rgba(0, 0, 0, 0.85);
+      backdrop-filter: blur(8px);
+      display: none;
+      align-items: center;
+      justify-content: center;
+      z-index: 100;
+      padding: 20px;
+    }
+
+    .modal-content {
+      background: linear-gradient(180deg, #091a42 0%, #03081a 100%);
+      border: 2px solid var(--cyan-glow);
+      border-radius: 12px;
+      max-width: 500px;
+      width: 100%;
+      padding: 22px;
+      position: relative;
+    }
+
+    .modal-header {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      border-bottom: 1px solid rgba(0, 229, 255, 0.3);
+      padding-bottom: 10px;
+      margin-bottom: 14px;
+    }
+    .modal-header h3 {
+      font-family: 'Teko', sans-serif;
+      font-size: 24px;
+      color: var(--cyan-glow);
+      text-transform: uppercase;
+    }
+
+    .audience-chart {
+      display: flex;
+      justify-content: space-around;
+      align-items: flex-end;
+      height: 160px;
+      margin: 16px 0 10px;
+      padding: 10px;
+      background: rgba(0, 0, 0, 0.4);
+      border-radius: 8px;
+    }
+    .audience-col {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      width: 20%;
+      height: 100%;
+      justify-content: flex-end;
+    }
+    .audience-percent {
+      font-size: 12px;
+      font-weight: 700;
+      margin-bottom: 4px;
+      color: var(--gold);
+    }
+    .audience-bar {
+      width: 100%;
+      background: linear-gradient(180deg, var(--cyan-glow) 0%, var(--blue-accent) 100%);
+      border-radius: 4px 4px 0 0;
+      transition: height 1s ease-out;
+      min-height: 4px;
+    }
+    .audience-label {
+      margin-top: 6px;
+      font-weight: 800;
+      font-size: 14px;
+      color: #ffffff;
+    }
+
+    .friend-profile {
+      display: flex;
+      align-items: center;
+      gap: 14px;
+      margin-bottom: 12px;
+    }
+    .friend-avatar-img {
+      width: 56px;
+      height: 56px;
+      border-radius: 50%;
+      border: 2px solid var(--gold);
+      object-fit: cover;
+      background: #1e3a8a;
+    }
+    .dialogue-bubble {
+      background: rgba(255, 255, 255, 0.08);
+      border-left: 4px solid var(--gold);
+      padding: 12px;
+      border-radius: 0 8px 8px 0;
+      font-size: 13.5px;
+      line-height: 1.5;
+      font-style: italic;
+    }
+
+    .modal-close-btn {
+      width: 100%;
+      margin-top: 16px;
+      background: linear-gradient(180deg, #0077ff 0%, #0044aa 100%);
+      border: 1px solid var(--cyan-glow);
+      color: white;
+      padding: 9px;
+      border-radius: 6px;
+      font-weight: 700;
+      font-size: 13px;
+      cursor: pointer;
+      text-transform: uppercase;
+    }
+
+    /* Screen Overlays */
+    .screen-overlay {
+      position: fixed;
+      top: 0; left: 0; right: 0; bottom: 0;
+      background: var(--bg-radial);
+      z-index: 90;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      padding: 20px;
+      text-align: center;
+      overflow-y: auto;
+    }
+
+    /* =======================================================
+       COVER DEPAN UTAMA & TOMBOL MULAI MENGAMBANG (FLOATING)
+       ======================================================= */
+    #splash-cover-screen {
+      z-index: 120;
+      background: #02040a;
+      overflow: hidden;
+      padding: 0;
+    }
+
+    .cover-image-container {
+      position: absolute;
+      top: 0; left: 0; width: 100%; height: 100%;
+      overflow: hidden;
+    }
+
+    .cover-front-img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      filter: brightness(0.65) contrast(1.1);
+      transform: scale(1.02);
+      transition: transform 10s ease;
+    }
+
+    #splash-cover-screen:hover .cover-front-img {
+      transform: scale(1.08);
+    }
+
+    .cover-overlay-gradient {
+      position: absolute;
+      top: 0; left: 0; width: 100%; height: 100%;
+      background: radial-gradient(circle at 50% 50%, rgba(3, 7, 24, 0.4) 0%, rgba(2, 4, 11, 0.85) 100%);
+      z-index: 2;
+    }
+
+    .cover-content-floating {
+      position: relative;
+      z-index: 3;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      gap: 22px;
+      padding: 20px;
+    }
+
+    .cover-title-badge {
+      font-family: 'Teko', sans-serif;
+      font-size: 56px;
+      letter-spacing: 3px;
+      color: #ffffff;
+      text-transform: uppercase;
+      text-shadow: 0 0 25px var(--cyan-glow), 0 4px 12px rgba(0,0,0,0.9);
+      line-height: 1;
+    }
+
+    .cover-subtitle-badge {
+      font-size: 16px;
+      font-weight: 700;
+      color: var(--gold);
+      letter-spacing: 2px;
+      text-transform: uppercase;
+      text-shadow: 0 2px 6px rgba(0,0,0,0.9);
+      background: rgba(3, 7, 24, 0.7);
+      padding: 6px 20px;
+      border-radius: 50px;
+      border: 1px solid rgba(255, 183, 3, 0.4);
+    }
+
+    /* Animasi Tombol Mengambang (Floating Effect) */
+    .btn-floating-start {
+      position: relative;
+      background: linear-gradient(180deg, #ffb703 0%, #d97706 60%, #92400e 100%);
+      border: 3px solid #fef08a;
+      color: #02040b;
+      font-family: 'Teko', sans-serif;
+      font-size: 38px;
+      font-weight: 700;
+      letter-spacing: 3px;
+      padding: 10px 65px;
+      border-radius: 60px;
+      cursor: pointer;
+      text-transform: uppercase;
+      box-shadow: 0 0 35px rgba(255, 183, 3, 0.8), 0 10px 25px rgba(0, 0, 0, 0.6);
+      animation: floatUpDown 2.2s infinite ease-in-out, glowPulse 1.8s infinite alternate;
+      transition: all 0.3s;
+    }
+
+    @keyframes floatUpDown {
+      0% { transform: translateY(0px); }
+      50% { transform: translateY(-14px); }
+      100% { transform: translateY(0px); }
+    }
+
+    @keyframes glowPulse {
+      0% { box-shadow: 0 0 25px rgba(255, 183, 3, 0.6); }
+      100% { box-shadow: 0 0 50px rgba(255, 183, 3, 1), 0 0 20px var(--cyan-glow); }
+    }
+
+    .btn-floating-start:hover {
+      transform: translateY(-8px) scale(1.08);
+      background: linear-gradient(180deg, #ffffff 0%, #ffb703 50%, #b45309 100%);
+      color: #000;
+    }
+
+    /* Start Screen & Form */
+    .start-logo-img {
+      width: 100px;
+      height: 100px;
+      border-radius: 50%;
+      border: 3px solid #fef08a;
+      box-shadow: 0 0 35px rgba(255, 183, 3, 0.8);
+      object-fit: contain;
+      margin-bottom: 14px;
+    }
+
+    .screen-title {
+      font-family: 'Teko', sans-serif;
+      font-size: 40px;
+      letter-spacing: 2px;
+      line-height: 1;
+      margin-bottom: 4px;
+      color: #ffffff;
+      text-shadow: 0 0 20px var(--cyan-glow);
+    }
+    .screen-subtitle {
+      font-size: 14px;
+      color: var(--cyan-glow);
+      margin-bottom: 18px;
+      max-width: 580px;
+    }
+
+    .student-form-card {
+      background: rgba(11, 26, 61, 0.85);
+      border: 2px solid var(--cyan-glow);
+      border-radius: 12px;
+      padding: 20px 26px;
+      max-width: 440px;
+      width: 100%;
+      margin-bottom: 18px;
+      box-shadow: 0 0 25px rgba(0, 229, 255, 0.3);
+      text-align: left;
+    }
+
+    .form-group { margin-bottom: 14px; }
+    .form-group label {
+      display: block;
+      font-size: 12px;
+      font-weight: 700;
+      color: #cbd5e1;
+      margin-bottom: 6px;
+      text-transform: uppercase;
+    }
+
+    .form-input {
+      width: 100%;
+      padding: 10px 14px;
+      border-radius: 6px;
+      background: rgba(4, 9, 26, 0.9);
+      border: 1px solid rgba(0, 229, 255, 0.4);
+      color: #ffffff;
+      font-size: 14px;
+      font-family: 'Montserrat', sans-serif;
+      outline: none;
+      transition: all 0.2s;
+    }
+    .form-input:focus {
+      border-color: var(--gold);
+      box-shadow: 0 0 10px rgba(255, 183, 3, 0.5);
+    }
+
+    .btn-play-big {
+      background: linear-gradient(180deg, #ff9900 0%, #b45309 100%);
+      border: 2px solid #fff275;
+      color: #ffffff;
+      font-family: 'Teko', sans-serif;
+      font-size: 28px;
+      letter-spacing: 2px;
+      padding: 6px 42px;
+      border-radius: 50px;
+      cursor: pointer;
+      box-shadow: 0 0 25px rgba(255, 153, 0, 0.7);
+      transition: all 0.25s;
+      text-transform: uppercase;
+    }
+    .btn-play-big:hover {
+      transform: scale(1.05);
+      box-shadow: 0 0 35px rgba(255, 183, 3, 1);
+    }
+
+    .rules-list {
+      margin-top: 14px;
+      background: rgba(11, 26, 61, 0.55);
+      border: 1px solid rgba(0, 229, 255, 0.2);
+      border-radius: 8px;
+      padding: 12px 18px;
+      max-width: 580px;
+      text-align: left;
+      font-size: 11.5px;
+      line-height: 1.5;
+      color: #cbd5e1;
+    }
+
+    /* Certificate Styling */
+    .certificate-modal-container {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      width: 100%;
+      max-width: 820px;
+    }
+
+    .certificate-sheet {
+      width: 100%;
+      background: radial-gradient(circle at 50% 50%, #fffdf8 0%, #fbf2dc 100%);
+      color: #1e293b;
+      padding: 32px 42px;
+      border-radius: 8px;
+      border: 10px double #b45309;
+      box-shadow: 0 0 40px rgba(0, 0, 0, 0.9);
+      position: relative;
+      text-align: center;
+    }
+
+    .cert-corner {
+      position: absolute;
+      width: 40px;
+      height: 40px;
+      border: 3px solid #b45309;
+    }
+    .cert-tl { top: 8px; left: 8px; border-right: none; border-bottom: none; }
+    .cert-tr { top: 8px; right: 8px; border-left: none; border-bottom: none; }
+    .cert-bl { bottom: 8px; left: 8px; border-right: none; border-top: none; }
+    .cert-br { bottom: 8px; right: 8px; border-left: none; border-top: none; }
+
+    .cert-header {
+      font-family: 'Cinzel', serif;
+      font-size: 26px;
+      font-weight: 900;
+      color: #78350f;
+      letter-spacing: 3px;
+      margin-bottom: 2px;
+      text-transform: uppercase;
+    }
+
+    .cert-sub {
+      font-size: 12px;
+      font-weight: 700;
+      color: #b45309;
+      letter-spacing: 2px;
+      text-transform: uppercase;
+      margin-bottom: 16px;
+    }
+
+    .cert-present {
+      font-size: 13px;
+      color: #475569;
+      font-style: italic;
+      margin-bottom: 6px;
+    }
+
+    .cert-name {
+      font-family: 'Cinzel', serif;
+      font-size: 32px;
+      font-weight: 700;
+      color: #0f172a;
+      border-bottom: 2px solid #b45309;
+      display: inline-block;
+      padding: 0 24px 4px;
+      margin-bottom: 6px;
+    }
+
+    .cert-class {
+      font-size: 14px;
+      font-weight: 700;
+      color: #334155;
+      margin-bottom: 14px;
+    }
+
+    .cert-body {
+      font-size: 13px;
+      line-height: 1.6;
+      color: #334155;
+      max-width: 620px;
+      margin: 0 auto 18px;
+    }
+
+    .cert-prize-box {
+      background: linear-gradient(135deg, #78350f 0%, #b45309 50%, #78350f 100%);
+      color: #fef08a;
+      padding: 10px 24px;
+      border-radius: 6px;
+      display: inline-block;
+      border: 1px solid #fde047;
+      box-shadow: 0 4px 10px rgba(120, 53, 15, 0.4);
+      margin-bottom: 20px;
+    }
+    .cert-prize-label {
+      font-size: 11px;
+      letter-spacing: 1px;
+      text-transform: uppercase;
+      font-weight: 700;
+    }
+    .cert-prize-val {
+      font-family: 'Teko', sans-serif;
+      font-size: 38px;
+      line-height: 1;
+      font-weight: 700;
+    }
+
+    .cert-footer {
+      display: flex;
+      justify-content: space-between;
+      align-items: flex-end;
+      margin-top: 10px;
+      padding: 0 20px;
+    }
+
+    .cert-sig-block {
+      text-align: center;
+      width: 170px;
+    }
+    .cert-sig-line {
+      border-top: 1px solid #475569;
+      margin-top: 40px;
+      padding-top: 4px;
+      font-size: 11px;
+      font-weight: 700;
+      color: #1e293b;
+    }
+
+    .cert-stamp-img {
+      width: 78px;
+      height: 78px;
+      object-fit: contain;
+      margin: 0 auto;
+    }
+
+    .cert-actions {
+      display: flex;
+      gap: 12px;
+      margin-top: 16px;
+    }
+    .cert-btn-print {
+      background: #10b981;
+      color: #ffffff;
+      border: none;
+      padding: 10px 24px;
+      border-radius: 6px;
+      font-weight: 700;
+      font-size: 13px;
+      cursor: pointer;
+    }
+    .cert-btn-restart {
+      background: var(--blue-accent);
+      color: #ffffff;
+      border: none;
+      padding: 10px 24px;
+      border-radius: 6px;
+      font-weight: 700;
+      font-size: 13px;
+      cursor: pointer;
+    }
+
+    @media print {
+      body * { visibility: hidden; }
+      #certificate-wrap, #certificate-wrap * { visibility: visible; }
+      #certificate-wrap {
+        position: absolute;
+        top: 0; left: 0; width: 100%;
+        margin: 0; padding: 0;
+      }
+      .cert-actions { display: none !important; }
+    }
+
+    @keyframes fadeIn {
+      from { opacity: 0; }
+      to { opacity: 1; }
+    }
+  </style>
+</head>
+<body>
+  <!-- Lapisan Background Gambar Arena Studio Kuis -->
+  <div id="arena-bg-layer"></div>
+
+  <!-- =======================================================
+       1. SCREEN COVER DEPAN DENGAN TOMBOL MENGAMBANG
+       ======================================================= -->
+  <div class="screen-overlay" id="splash-cover-screen">
+    <div class="cover-image-container">
+      <img id="img-cover-front" class="cover-front-img" alt="Cover Depan Kuis">
+      <div class="cover-overlay-gradient"></div>
+    </div>
+    <div class="cover-content-floating">
+      <div class="cover-title-badge">WHO WANTS TO BE A MILLIONAIRE?</div>
+      <div class="cover-subtitle-badge">Edisi Matematika Kelas 5 SD &bull; Bilangan Cacah Sampai 1.000.000</div>
+      <button class="btn-floating-start" onclick="openRegistrationFromCover()">
+        ⚡ KLIK MULAI KUIS ⚡
+      </button>
+    </div>
+  </div>
+
+  <header>
+    <div class="logo-container">
+      <img id="img-header-logo" class="logo-badge-img custom-icon-img" alt="Logo">
+      <div class="logo-title">
+        <h1>Kuis 1 Miliar Matematika</h1>
+        <div class="student-badge-top" id="header-student-tag">Peserta: - (Kelas -)</div>
+      </div>
+    </div>
+    <div class="top-actions">
+      <button class="btn-top" id="mobile-ladder-btn" onclick="toggleMobileLadder()">
+        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 6h18M3 12h18M3 18h18"/></svg>
+        Tangga Hadiah
+      </button>
+      <button class="btn-top" id="sound-btn" onclick="toggleAudio()">
+        <span id="sound-icon">🔊</span>
+        <span id="sound-text">Audio: ON</span>
+      </button>
+    </div>
+  </header>
+
+  <main>
+    <div class="stage-container">
+      <div class="top-controls-row">
+        <!-- 3 Lifelines with PNG icons -->
+        <div class="lifelines-bar">
+          <button class="lifeline-btn" id="ll-fifty" onclick="useFiftyFifty()" title="50:50">
+            <img id="img-ll-fifty" alt="50:50">
+            <span>50:50</span>
+          </button>
+          <button class="lifeline-btn" id="ll-phone" onclick="usePhoneAFriend()" title="Telepon">
+            <img id="img-ll-phone" alt="Telepon">
+            <span>Telepon</span>
+          </button>
+          <button class="lifeline-btn" id="ll-audience" onclick="useAskAudience()" title="Penonton">
+            <img id="img-ll-audience" alt="Penonton">
+            <span>Penonton</span>
+          </button>
+        </div>
+
+        <!-- 30-Second Countdown Widget -->
+        <div class="timer-badge-container">
+          <div class="timer-circle-wrap">
+            <svg>
+              <circle class="timer-circle-bg" cx="24" cy="24" r="20"></circle>
+              <circle class="timer-circle-bar" id="timer-progress" cx="24" cy="24" r="20"></circle>
+            </svg>
+            <div class="timer-circle-text" id="timer-number">30</div>
+          </div>
+          <div>
+            <div class="timer-label">WAKTU TERSISA</div>
+            <div style="font-size:10px; color:#cbd5e1;">Maks. 30 detik / soal</div>
+          </div>
+        </div>
+      </div>
+
+      <div class="current-status-banner">
+        <div>
+          <span class="status-level" id="display-qnum">Pertanyaan 1 dari 15</span>
+          <div style="font-size: 11px; color: #94a3b8; margin-top:1px;">Materi: <span id="display-topic">Membaca Bilangan</span></div>
+        </div>
+        <div class="status-prize" id="display-prize">Rp 50.000</div>
+      </div>
+
+      <div class="qa-section">
+        <div class="hex-box question-box" id="question-text">
+          Memuat pertanyaan kuis...
+        </div>
+
+        <div class="answers-grid">
+          <button class="hex-box answer-btn" id="opt-0" onclick="selectAnswer(0)">
+            <span class="answer-letter">A:</span>
+            <span class="answer-text" id="opt-text-0">-</span>
+          </button>
+          <button class="hex-box answer-btn" id="opt-1" onclick="selectAnswer(1)">
+            <span class="answer-letter">B:</span>
+            <span class="answer-text" id="opt-text-1">-</span>
+          </button>
+          <button class="hex-box answer-btn" id="opt-2" onclick="selectAnswer(2)">
+            <span class="answer-letter">C:</span>
+            <span class="answer-text" id="opt-text-2">-</span>
+          </button>
+          <button class="hex-box answer-btn" id="opt-3" onclick="selectAnswer(3)">
+            <span class="answer-letter">D:</span>
+            <span class="answer-text" id="opt-text-3">-</span>
+          </button>
+        </div>
+
+        <div class="final-answer-panel" id="final-panel">
+          <p id="final-prompt">Kunci pilihan ini sebagai Jawaban Akhir?</p>
+          <div class="final-btn-group">
+            <button class="btn-action-lock" onclick="confirmFinalAnswer()">KUNCI JAWABAN</button>
+            <button class="btn-action-cancel" onclick="cancelSelection()">PILIH ULANG</button>
+          </div>
+        </div>
+
+        <div class="edu-explain-card" id="explanation-card">
+          <h4>💡 Pembahasan Konsep Matematika</h4>
+          <p id="explanation-text"></p>
+          <button onclick="nextQuestion()">Lanjut Soal Berikutnya &rarr;</button>
+          <div style="clear: both;"></div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Right Side: Money Ladder -->
+    <aside class="money-ladder-container" id="ladder-container">
+      <div class="ladder-title">TANGGA HADIAH 1 MILIAR</div>
+      <ul class="ladder-list" id="ladder-list"></ul>
+      <button class="walk-away-btn" onclick="walkAway()">
+        🏳️ Berhenti &amp; Bawa Pulang Uang
+      </button>
+    </aside>
+  </main>
+
+  <!-- Modal Audience -->
+  <div class="modal-backdrop" id="modal-audience">
+    <div class="modal-content">
+      <div class="modal-header">
+        <img id="img-modal-audience-icon" style="width:28px; height:28px; object-fit:contain;" alt="Icon">
+        <h3>Hasil Polling Penonton Studio</h3>
+      </div>
+      <p style="font-size:12.5px; color:#cbd5e1;">Sebanyak 100 penonton di studio telah memilih opsi melalui keypad interaktif:</p>
+      <div class="audience-chart">
+        <div class="audience-col">
+          <div class="audience-percent" id="aud-p0">0%</div>
+          <div class="audience-bar" id="aud-bar0" style="height: 0%;"></div>
+          <div class="audience-label">A</div>
+        </div>
+        <div class="audience-col">
+          <div class="audience-percent" id="aud-p1">0%</div>
+          <div class="audience-bar" id="aud-bar1" style="height: 0%;"></div>
+          <div class="audience-label">B</div>
+        </div>
+        <div class="audience-col">
+          <div class="audience-percent" id="aud-p2">0%</div>
+          <div class="audience-bar" id="aud-bar2" style="height: 0%;"></div>
+          <div class="audience-label">C</div>
+        </div>
+        <div class="audience-col">
+          <div class="audience-percent" id="aud-p3">0%</div>
+          <div class="audience-bar" id="aud-bar3" style="height: 0%;"></div>
+          <div class="audience-label">D</div>
+        </div>
+      </div>
+      <button class="modal-close-btn" onclick="closeModal('modal-audience')">Kembali ke Pertanyaan</button>
+    </div>
+  </div>
+
+  <!-- Modal Phone Friend -->
+  <div class="modal-backdrop" id="modal-phone">
+    <div class="modal-content">
+      <div class="modal-header">
+        <img id="img-modal-phone-icon" style="width:28px; height:28px; object-fit:contain;" alt="Icon">
+        <h3>Telepon: Pak Guru Budi</h3>
+      </div>
+      <div class="friend-profile">
+        <img id="img-friend-avatar" class="friend-avatar-img" alt="Guru">
+        <div>
+          <h4 style="font-size:15px; color:#fff;">Pak Budi, S.Pd.</h4>
+          <span style="font-size:11.5px; color:var(--cyan-glow);">Guru Ahli Matematika SD</span>
+        </div>
+      </div>
+      <div class="dialogue-bubble" id="phone-dialogue-text">
+        "Halo! Coba perhatikan baik-baik konsepnya..."
+      </div>
+      <button class="modal-close-btn" onclick="closeModal('modal-phone')">Terima Kasih, Pak Guru!</button>
+    </div>
+  </div>
+
+  <!-- Start Screen & Student Form -->
+  <div class="screen-overlay" id="start-screen" style="display: none;">
+    <img id="img-start-logo" class="start-logo-img" alt="Millionaire Logo">
+    <h2 class="screen-title">WHO WANTS TO BE A MILLIONAIRE?</h2>
+    <p class="screen-subtitle">Edisi Matematika Kelas 5 SD: Bilangan Cacah Sampai 1.000.000</p>
+    
+    <div class="student-form-card">
+      <div class="form-group">
+        <label for="input-student-name">Nama Lengkap Siswa:</label>
+        <input type="text" id="input-student-name" class="form-input" placeholder="Masukkan nama siswa..." autocomplete="off">
+      </div>
+      <div class="form-group">
+        <label for="input-student-class">Kelas / Satuan Pendidikan:</label>
+        <input type="text" id="input-student-class" class="form-input" placeholder="Contoh: 5A - SDN 10 Toho" autocomplete="off">
+      </div>
+      <button class="btn-play-big" style="width: 100%; margin-top: 6px;" onclick="validateAndStart()">MASUK KE ARENA</button>
+    </div>
+
+    <div class="rules-list">
+      <strong style="color:var(--gold); display:block; margin-bottom:4px;">📋 Peraturan Kursi Panas:</strong>
+      &bull; <strong>Waktu Berpikir:</strong> Setiap soal dibatasi waktu <strong>30 detik</strong>.<br>
+      &bull; <strong>15 Tingkat Hadiah:</strong> Raih grand prize <strong>Rp 1.000.000.000</strong>.<br>
+      &bull; <strong>Titik Aman:</strong> Soal 5 (Rp 1 Juta) &amp; Soal 10 (Rp 32 Juta).<br>
+      &bull; Siswa akan mendapatkan <strong>Sertifikat Digital Resmi</strong> sesuai capaian stage terakhir!
+    </div>
+  </div>
+
+  <!-- End Screen & Certificate -->
+  <div class="screen-overlay" id="end-screen" style="display: none;">
+    <div class="certificate-modal-container" id="certificate-wrap">
+      <div class="certificate-sheet">
+        <div class="cert-corner cert-tl"></div>
+        <div class="cert-corner cert-tr"></div>
+        <div class="cert-corner cert-bl"></div>
+        <div class="cert-corner cert-br"></div>
+
+        <div class="cert-header">Sertifikat Penghargaan</div>
+        <div class="cert-sub">Kuis 1 Miliar Matematika Sekolah Dasar</div>
+        
+        <p class="cert-present">Diberikan dengan bangga kepada:</p>
+        <div class="cert-name" id="cert-student-name">Nama Siswa</div>
+        <div class="cert-class" id="cert-student-class">Kelas 5 SD</div>
+
+        <p class="cert-body" id="cert-description">
+          Atas partisipasi dan dedikasi luar biasa dalam menyelesaikan tantangan penalaran matematika pada materi 
+          <strong>Bilangan Cacah Sampai 1.000.000</strong>, dan berhasil bertahan hingga stage pencapaian:
+        </p>
+
+        <div class="cert-prize-box">
+          <div class="cert-prize-label">Total Hadiah Capaian</div>
+          <div class="cert-prize-val" id="cert-prize-val">Rp 32.000.000</div>
+        </div>
+
+        <div class="cert-footer">
+          <div class="cert-sig-block">
+            <div style="font-size:11px; color:#64748b;">Tanggal Penyelesaian:</div>
+            <div style="font-size:12px; font-weight:700; color:#1e293b;" id="cert-date">-</div>
+            <div class="cert-sig-line">Panitia Evaluasi Belajar</div>
+          </div>
+          <div>
+            <img id="img-cert-stamp" class="cert-stamp-img" alt="Cap Resmi">
+          </div>
+          <div class="cert-sig-block">
+            <div style="font-size:11px; color:#64748b;">Predikat Capaian:</div>
+            <div style="font-size:12px; font-weight:700; color:#b45309;" id="cert-rank-tag">Cendekiawan Muda</div>
+            <div class="cert-sig-line">Guru Kelas / Penguji</div>
+          </div>
+        </div>
+      </div>
+
+      <div class="cert-actions">
+        <button class="cert-btn-print" onclick="window.print()">🖨️ Cetak / Simpan PDF</button>
+        <button class="cert-btn-restart" onclick="restartGame()">🔄 Main Ulang Kuis</button>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    /* =========================================================================
+       1. BLOK KONFIGURASI ASET GAMBAR (PNG)
+       Ganti value string path di bawah ini sesuai lokasi gambar Anda di folder.
+       ========================================================================= */
+    const CONFIG_ASSETS_IMAGES = {
+      coverFront:     "assets/images/cover_millionaire.png",  // Gambar Cover Depan Layar Awal
+      arenaBackground:"assets/images/arena_background.png",   // Gambar Background Arena Studio Kuis
+      headerLogo:     "assets/images/logo_millionaire.png",   // Logo kecil di navbar atas
+      startLogo:      "assets/images/logo_millionaire.png",   // Logo besar di form data siswa
+      lifelineFifty:  "assets/images/lifeline_5050.png",       // Ikon bantuan 50:50
+      lifelinePhone:  "assets/images/lifeline_phone.png",      // Ikon bantuan Telepon Guru
+      lifelineAud:    "assets/images/lifeline_audience.png",   // Ikon bantuan Polling Penonton
+      friendAvatar:   "assets/images/guru_budi.png",           // Foto avatar guru di modal telepon
+      certStamp:      "assets/images/stempel_resmi.png"        // Gambar stempel/cap di sertifikat
+    };
+
+    /* =========================================================================
+       2. BLOK KONFIGURASI ASET SUARA (MP3)
+       Ganti value string path di bawah ini sesuai lokasi file audio MP3 Anda.
+       ========================================================================= */
+    const CONFIG_ASSETS_AUDIO = {
+      themeStart:     "assets/audio/main_theme.mp3",       // Musik intro pembuka
+      questionReveal: "assets/audio/question_appear.mp3",  // Suara saat soal dimunculkan
+      heartbeatLoop:  "assets/audio/heartbeat_loop.mp3",   // Suara detak jantung berulang
+      timerTick:      "assets/audio/timer_tick.mp3",       // Detak jam 5 detik terakhir
+      timeOut:        "assets/audio/time_out.mp3",         // Bel saat 30 detik habis
+      selectOption:   "assets/audio/option_select.mp3",    // Bunyi klik saat memilih A/B/C/D
+      lockAnswer:     "assets/audio/final_answer_lock.mp3",// Bunyi ketegangan saat mengunci jawaban
+      correctNormal:  "assets/audio/correct_answer.mp3",   // Suara jawaban benar biasa
+      correctMilestone:"assets/audio/milestone_win.mp3",   // Suara menang titik aman (1 Juta / 32 Juta)
+      wrongAnswer:    "assets/audio/wrong_buzzer.mp3",     // Buzzer jawaban salah
+      jackpotWin:     "assets/audio/jackpot_1miliar.mp3",  // Musik grand final menang 1 Miliar
+      lifelineUsed:   "assets/audio/lifeline_ping.mp3"     // Suara saat bantuan diklik
+    };
+
+    /* Inisialisasi Gambar ke DOM */
+    function initAssetsImages() {
+      const setImg = (id, src, fallbackSvg) => {
+        const el = document.getElementById(id);
+        if (!el) return;
+        el.src = src;
+        el.onerror = () => { el.src = fallbackSvg; };
+      };
+
+      const fallbackCoin = "data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='100' height='100' viewBox='0 0 24 24' fill='%23ffb703'><circle cx='12' cy='12' r='10'/><text x='12' y='16' font-size='10' font-weight='bold' text-anchor='middle' fill='%23000'>1M</text></svg>";
+      const fallbackCover = "data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='800' height='600' viewBox='0 0 800 600' fill='%23061233'><rect width='100%25' height='100%25'/><circle cx='400' cy='300' r='180' fill='%230c2366' stroke='%2300e5ff' stroke-width='4'/><text x='400' y='315' font-size='42' font-weight='bold' text-anchor='middle' fill='%23ffb703'>MILLIONAIRE ARENA</text></svg>";
+      const fallbackStamp = "data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='100' height='100' viewBox='0 0 100 100'><circle cx='50' cy='50' r='45' stroke='%23b45309' stroke-width='3' stroke-dasharray='4' fill='none'/><text x='50' y='55' font-size='10' font-weight='bold' text-anchor='middle' fill='%23b45309'>OFFICIAL 1M</text></svg>";
+      const fallbackAvatar = "data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='100' height='100' viewBox='0 0 24 24' fill='%23ffb703'><circle cx='12' cy='8' r='4'/><path d='M4 20c0-4 4-6 8-6s8 2 8 6'/></svg>";
+      const fallbackLifeline = "data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='100' height='100' viewBox='0 0 24 24' fill='none' stroke='%2300e5ff' stroke-width='2'><circle cx='12' cy='12' r='10'/></svg>";
+
+      // Set Cover & Arena Background
+      setImg('img-cover-front', CONFIG_ASSETS_IMAGES.coverFront, fallbackCover);
+      const arenaLayer = document.getElementById('arena-bg-layer');
+      if (arenaLayer) {
+        arenaLayer.style.backgroundImage = `url('${CONFIG_ASSETS_IMAGES.arenaBackground}')`;
+      }
+
+      setImg('img-header-logo', CONFIG_ASSETS_IMAGES.headerLogo, fallbackCoin);
+      setImg('img-start-logo', CONFIG_ASSETS_IMAGES.startLogo, fallbackCoin);
+      setImg('img-ll-fifty', CONFIG_ASSETS_IMAGES.lifelineFifty, fallbackLifeline);
+      setImg('img-ll-phone', CONFIG_ASSETS_IMAGES.lifelinePhone, fallbackLifeline);
+      setImg('img-ll-audience', CONFIG_ASSETS_IMAGES.lifelineAud, fallbackLifeline);
+      setImg('img-modal-audience-icon', CONFIG_ASSETS_IMAGES.lifelineAud, fallbackLifeline);
+      setImg('img-modal-phone-icon', CONFIG_ASSETS_IMAGES.lifelinePhone, fallbackLifeline);
+      setImg('img-friend-avatar', CONFIG_ASSETS_IMAGES.friendAvatar, fallbackAvatar);
+      setImg('img-cert-stamp', CONFIG_ASSETS_IMAGES.certStamp, fallbackStamp);
+    }
+
+    /* Transisi dari Layar Cover Depan ke Form Identitas Siswa */
+    function openRegistrationFromCover() {
+      playAudio(CONFIG_ASSETS_AUDIO.themeStart);
+      const splashScreen = document.getElementById('splash-cover-screen');
+      const startScreen = document.getElementById('start-screen');
+      
+      splashScreen.style.transition = 'opacity 0.6s ease, transform 0.6s ease';
+      splashScreen.style.opacity = '0';
+      splashScreen.style.transform = 'scale(1.05)';
+      
+      setTimeout(() => {
+        splashScreen.style.display = 'none';
+        startScreen.style.display = 'flex';
+      }, 550);
+    }
+
+    /* Controller Pemutar File Audio MP3 */
+    let audioMuted = false;
+    let heartbeatAudio = null;
+
+    function playAudio(path, loop = false) {
+      if (audioMuted || !path) return null;
+      try {
+        const audio = new Audio(path);
+        audio.loop = loop;
+        audio.play().catch(e => {
+          console.log("Audio play notice:", e.message);
+        });
+        return audio;
+      } catch (e) {
+        console.error("Gagal memutar audio:", e);
+        return null;
+      }
+    }
+
+    function startHeartbeatSound() {
+      stopHeartbeatSound();
+      if (audioMuted) return;
+      heartbeatAudio = playAudio(CONFIG_ASSETS_AUDIO.heartbeatLoop, true);
+    }
+
+    function stopHeartbeatSound() {
+      if (heartbeatAudio) {
+        heartbeatAudio.pause();
+        heartbeatAudio.currentTime = 0;
+        heartbeatAudio = null;
+      }
+    }
+
+    function toggleAudio() {
+      audioMuted = !audioMuted;
+      const soundText = document.getElementById('sound-text');
+      const soundIcon = document.getElementById('sound-icon');
+      if (!audioMuted) {
+        soundText.textContent = "Audio: ON";
+        soundIcon.textContent = "🔊";
+      } else {
+        soundText.textContent = "Audio: OFF";
+        soundIcon.textContent = "🔇";
+        stopHeartbeatSound();
+      }
+    }
+
+    /* 15 Bank Pertanyaan Bilangan Cacah Sampai 1.000.000 Kelas 5 SD */
+    const quizQuestions = [
+      {
+        question: "Lambang bilangan dari 'Empat ratus dua puluh lima ribu delapan ratus' adalah ...",
+        options: ["Rp 42.580", "425.800", "420.580", "452.800"],
+        correct: 1,
+        topic: "Membaca & Menulis Lambang Bilangan",
+        explanation: "Empat ratus dua puluh lima ribu ditulis 425.000, ditambah delapan ratus (800) menjadi 425.800.",
+        phoneHint: "Bapak yakin ini dasar membaca bilangan. 'Empat ratus dua puluh lima ribu' adalah 425.000, lalu delapan ratus (800). Jawabannya B!"
+      },
+      {
+        question: "Pada bilangan 782.350, angka 8 menempati nilai tempat ...",
+        options: ["Ratus ribuan", "Puluh ribuan", "Ribuan", "Ratusan"],
+        correct: 1,
+        topic: "Nilai Tempat Bilangan",
+        explanation: "Pada 782.350: 7 (ratus ribuan), 8 (puluh ribuan = 80.000), 2 (ribuan), 3 (ratusan), 5 (puluhan), 0 (satuan).",
+        phoneHint: "Urutkan dari satuan, puluhan, ratusan, ribuan, lalu puluh ribuan untuk angka 8. Opsi B tepat!"
+      },
+      {
+        question: "Bentuk dekomposisi yang tepat dari bilangan 609.430 adalah ...",
+        options: [
+          "600.000 + 90.000 + 400 + 30",
+          "600.000 + 9.000 + 400 + 30",
+          "60.000 + 9.000 + 400 + 30",
+          "600.000 + 9.000 + 43"
+        ],
+        correct: 1,
+        topic: "Dekomposisi Bilangan",
+        explanation: "609.430 diuraikan menjadi: 6 ratus ribuan (600.000) + 9 ribuan (9.000) + 4 ratusan (400) + 3 puluhan (30).",
+        phoneHint: "Karena angka puluh ribuannya 0, maka 600.000 langsung ditambah 9.000. Pilih opsi B!"
+      },
+      {
+        question: "Manakah tanda pertidaksamaan yang tepat untuk: 345.890 ... 348.590?",
+        options: ["> (lebih dari)", "= (sama dengan)", "< (kurang dari)", "+ (tambah)"],
+        correct: 2,
+        topic: "Membandingkan Bilangan",
+        explanation: "Angka ratus ribuan dan puluh ribuannya sama. Pada ribuan, 5.000 < 8.000, sehingga 345.890 < 348.590.",
+        phoneHint: "Bandingkan angka ribuannya: 5 ribu lebih sedikit daripada 8 ribu. Jawabannya kurang dari (<), yaitu C!"
+      },
+      { // MILESTONE 1 (Level 5 - Rp 1.000.000)
+        question: "Hasil pembulatan bilangan 574.620 ke ratus ribuan terdekat adalah ...",
+        options: ["500.000", "570.000", "600.000", "580.000"],
+        correct: 2,
+        topic: "Pembulatan / Penaksiran Ratus Ribuan",
+        explanation: "Perhatikan angka puluh ribuan (7). Karena 7 ≥ 5, maka ratus ribuan dibulatkan ke atas menjadi 600.000.",
+        phoneHint: "Titik aman 1 Juta! Puluh ribuannya angka 7 (≥ 5), maka dibulatkan ke atas menjadi 600.000 (C)."
+      },
+      {
+        question: "Urutan bilangan cacah berikut dari yang terkecil ke terbesar adalah:\nP = 512.400, Q = 509.900, R = 520.100",
+        options: ["P, Q, R", "Q, P, R", "R, P, Q", "Q, R, P"],
+        correct: 1,
+        topic: "Mengurutkan Bilangan",
+        explanation: "509.900 (Q) < 512.400 (P) < 520.100 (R). Urutan dari yang terkecil adalah Q, P, R.",
+        phoneHint: "Paling kecil adalah Q (509 ribu), lalu P (512 ribu), dan terbesar R (520 ribu). Pilihlah B!"
+      },
+      {
+        question: "Hasil penjumlahan dari 458.750 + 263.450 adalah ...",
+        options: ["712.100", "721.200", "722.200", "732.200"],
+        correct: 2,
+        topic: "Penjumlahan Bilangan Cacah",
+        explanation: "458.750 + 263.450 = 722.200.",
+        phoneHint: "Hitung bersusun dengan teliti termasuk angka simpanannya. Hasilnya adalah 722.200 (C)."
+      },
+      {
+        question: "Hasil pengurangan dari 800.000 - 347.625 adalah ...",
+        options: ["452.375", "453.375", "462.475", "552.375"],
+        correct: 0,
+        topic: "Pengurangan dengan Teknik Meminjam",
+        explanation: "800.000 - 347.625 = 452.375 (Cek: 452.375 + 347.625 = 800.000).",
+        phoneHint: "Gunakan pengurangan meminjam pada nol berurutan. Jawaban yang paling tepat adalah A!"
+      },
+      {
+        question: "Sebuah percetakan memproduksi 125 kotak buku. Jika setiap kotak berisi 250 buku, berapa total buku?",
+        options: ["30.250 buku", "31.250 buku", "31.500 buku", "32.250 buku"],
+        correct: 1,
+        topic: "Perkalian Kontekstual",
+        explanation: "125 × 250 = 31.250 buku.",
+        phoneHint: "Kalikan 125 x 250: 125 x 200 = 25.000, 125 x 50 = 6.250. Total 31.250 buku (B)."
+      },
+      { // MILESTONE 2 (Level 10 - Rp 32.000.000)
+        question: "Bantuan beras 750.000 kg dibagikan rata kepada 500 desa. Setiap desa menerima ...",
+        options: ["150 kg", "1.250 kg", "1.500 kg", "15.000 kg"],
+        correct: 2,
+        topic: "Pembagian Bilangan Cacah Besar",
+        explanation: "750.000 ÷ 500 = 7.500 ÷ 5 = 1.500 kg.",
+        phoneHint: "Soal batas aman 32 Juta! Hilangkan dua nol di kedua bilangan: 7.500 dibagi 5 sama dengan 1.500 kg (C)!"
+      },
+      {
+        question: "Jumlah pengunjung museum adalah 487.650 orang. Dibulatkan ke ribuan terdekat menjadi ...",
+        options: ["487.000", "487.700", "488.000", "490.000"],
+        correct: 2,
+        topic: "Pembulatan ke Ribuan Terdekat",
+        explanation: "Angka ratusan adalah 6 (≥ 5), maka nilai ribuan 7 dibulatkan ke atas menjadi 8 -> 488.000.",
+        phoneHint: "Ratusannya adalah 6 (lebih dari atau sama dengan 5). Jadi naik ke 488.000 (C)."
+      },
+      {
+        question: "Koperasi sekolah memiliki kas Rp 650.000. Membeli ATK Rp 185.000 dan buku Rp 215.000. Berapa sisa kas koperasi?",
+        options: ["Rp 250.000", "Rp 260.000", "Rp 300.000", "Rp 350.000"],
+        correct: 0,
+        topic: "Operasi Campuran Kontekstual",
+        explanation: "Total belanja = 185.000 + 215.000 = 400.000. Sisa uang = 650.000 - 400.000 = 250.000.",
+        phoneHint: "Total pengeluaran tepat 400 ribu. Berarti 650 ribu dikurang 400 ribu tersisa Rp 250.000 (A)."
+      },
+      {
+        question: "Nilai dari: (350.000 + 150.000) ÷ 250 adalah ...",
+        options: ["1.500", "2.000", "2.500", "20.000"],
+        correct: 1,
+        topic: "Operasi Tanda Kurung & Pembagian",
+        explanation: "Kerjakan tanda kurung dulu: 350.000 + 150.000 = 500.000. Lalu 500.000 ÷ 250 = 2.000.",
+        phoneHint: "Selesaikan tanda kurung dulu: 500.000. 500.000 dibagi 250 adalah 2.000 (B)."
+      },
+      {
+        question: "Bilangan cacah 6 angka terbesar yang tersusun dari angka 8, 3, 0, 9, 5, dan 2 tanpa pengulangan adalah ...",
+        options: ["985.320", "985.302", "983.520", "958.320"],
+        correct: 0,
+        topic: "Penyusunan Bilangan Terbesar",
+        explanation: "Urutkan digit dari terbesar ke terkecil: 9, 8, 5, 3, 2, 0 sehingga didapat 985.320.",
+        phoneHint: "Soal level 14 menuju 1 Miliar! Urutkan digit terbesar ke terkecil: 9, 8, 5, 3, 2, 0. Jelas opsi A!"
+      },
+      { // JACKPOT 1 MILIAR (Level 15)
+        question: "Panitia mencetak 1.000.000 lembar tiket. Terjual di sesi I 425.500 tiket dan di sesi II 398.750 tiket. Berapa sisa tiket?",
+        options: ["175.750 tiket", "185.750 tiket", "174.250 tiket", "175.250 tiket"],
+        correct: 0,
+        topic: "Soal Cerita 1 Juta (Grand Final)",
+        explanation: "Total tiket terjual = 425.500 + 398.750 = 824.250. Sisa tiket = 1.000.000 - 824.250 = 175.750 tiket.",
+        phoneHint: "Pertanyaan 1 Miliar! 425.500 + 398.750 = 824.250. 1.000.000 - 824.250 tepat 175.750 tiket (A). Kunci sekarang!"
+      }
+    ];
+
+    const prizeLevels = [
+      { level: 1, prize: "Rp 50.000", val: 50000 },
+      { level: 2, prize: "Rp 125.000", val: 125000 },
+      { level: 3, prize: "Rp 250.000", val: 250000 },
+      { level: 4, prize: "Rp 500.000", val: 500000 },
+      { level: 5, prize: "Rp 1.000.000", val: 1000000, milestone: true },
+      { level: 6, prize: "Rp 2.000.000", val: 2000000 },
+      { level: 7, prize: "Rp 4.000.000", val: 4000000 },
+      { level: 8, prize: "Rp 8.000.000", val: 8000000 },
+      { level: 9, prize: "Rp 16.000.000", val: 16000000 },
+      { level: 10, prize: "Rp 32.000.000", val: 32000000, milestone: true },
+      { level: 11, prize: "Rp 64.000.000", val: 64000000 },
+      { level: 12, prize: "Rp 125.000.000", val: 125000000 },
+      { level: 13, prize: "Rp 250.000.000", val: 250000000 },
+      { level: 14, prize: "Rp 500.000.000", val: 500000000 },
+      { level: 15, prize: "Rp 1.000.000.000", val: 1000000000, jackpot: true }
+    ];
+
+    let gameState = {
+      studentName: "",
+      studentClass: "",
+      currentIndex: 0,
+      selectedOption: null,
+      isLocked: false,
+      lifelines: { fifty: true, phone: true, audience: true },
+      currentGuaranteed: 0,
+      currentWalkaway: 0,
+      hiddenOptions: [],
+      timerSeconds: 30,
+      timerInterval: null
+    };
+
+    function initLadderUI() {
+      const ladderEl = document.getElementById('ladder-list');
+      ladderEl.innerHTML = '';
+      for (let i = prizeLevels.length - 1; i >= 0; i--) {
+        const item = prizeLevels[i];
+        const li = document.createElement('li');
+        li.className = 'ladder-step';
+        li.id = `ladder-step-${i}`;
+
+        if (item.jackpot) li.classList.add('jackpot');
+        else if (item.milestone) li.classList.add('milestone');
+
+        li.innerHTML = `
+          <span class="step-num">${item.level}</span>
+          <span class="step-val">${item.prize}</span>
+        `;
+        ladderEl.appendChild(li);
+      }
+    }
+
+    function updateLadderHighlight() {
+      for (let i = 0; i < prizeLevels.length; i++) {
+        const el = document.getElementById(`ladder-step-${i}`);
+        if (!el) continue;
+        el.classList.remove('active', 'passed');
+        if (i < gameState.currentIndex) {
+          el.classList.add('passed');
+        } else if (i === gameState.currentIndex) {
+          el.classList.add('active');
+        }
+      }
+    }
+
+    function validateAndStart() {
+      const nameInput = document.getElementById('input-student-name').value.trim();
+      const classInput = document.getElementById('input-student-class').value.trim();
+
+      if (!nameInput) {
+        alert("Silakan ketik nama lengkap Anda terlebih dahulu!");
+        document.getElementById('input-student-name').focus();
+        return;
+      }
+      if (!classInput) {
+        alert("Silakan ketik kelas Anda terlebih dahulu!");
+        document.getElementById('input-student-class').focus();
+        return;
+      }
+
+      gameState.studentName = nameInput;
+      gameState.studentClass = classInput;
+
+      document.getElementById('header-student-tag').textContent = `Peserta: ${nameInput} (${classInput})`;
+      document.getElementById('start-screen').style.display = 'none';
+
+      startQuizGame();
+    }
+
+    function startQuizGame() {
+      gameState.currentIndex = 0;
+      gameState.selectedOption = null;
+      gameState.isLocked = false;
+      gameState.currentGuaranteed = 0;
+      gameState.currentWalkaway = 0;
+      gameState.lifelines = { fifty: true, phone: true, audience: true };
+      
+      resetLifelineButtons();
+      initLadderUI();
+      loadQuestion(0);
+    }
+
+    function resetLifelineButtons() {
+      ['ll-fifty', 'll-phone', 'll-audience'].forEach(id => {
+        document.getElementById(id).disabled = false;
+      });
+    }
+
+    function startTimer() {
+      stopTimer();
+      gameState.timerSeconds = 30;
+      updateTimerUI(30);
+
+      const circleBar = document.getElementById('timer-progress');
+      circleBar.classList.remove('warning');
+
+      gameState.timerInterval = setInterval(() => {
+        gameState.timerSeconds--;
+        const sec = gameState.timerSeconds;
+        updateTimerUI(sec);
+
+        if (sec <= 5 && sec > 0) {
+          circleBar.classList.add('warning');
+          playAudio(CONFIG_ASSETS_AUDIO.timerTick);
+        }
+
+        if (sec <= 0) {
+          stopTimer();
+          handleTimeout();
+        }
+      }, 1000);
+    }
+
+    function stopTimer() {
+      if (gameState.timerInterval) {
+        clearInterval(gameState.timerInterval);
+        gameState.timerInterval = null;
+      }
+    }
+
+    function updateTimerUI(seconds) {
+      document.getElementById('timer-number').textContent = seconds;
+      const circleBar = document.getElementById('timer-progress');
+      const totalOffset = 125.6;
+      const progress = (30 - seconds) / 30;
+      circleBar.style.strokeDashoffset = progress * totalOffset;
+    }
+
+    function handleTimeout() {
+      if (gameState.isLocked) return;
+      gameState.isLocked = true;
+      playAudio(CONFIG_ASSETS_AUDIO.timeOut);
+
+      for (let i = 0; i < 4; i++) {
+        document.getElementById(`opt-${i}`).disabled = true;
+      }
+
+      const currentQ = quizQuestions[gameState.currentIndex];
+      const correctBtn = document.getElementById(`opt-${currentQ.correct}`);
+      correctBtn.classList.add('correct');
+
+      document.getElementById('final-panel').style.display = 'none';
+      alert(`Waktu 30 detik habis! Jawaban yang benar adalah pilihan ${['A','B','C','D'][currentQ.correct]}.`);
+
+      setTimeout(() => {
+        finishGameAndShowCertificate(false, 0, true);
+      }, 1800);
+    }
+
+    function loadQuestion(index) {
+      gameState.currentIndex = index;
+      gameState.selectedOption = null;
+      gameState.isLocked = false;
+      gameState.hiddenOptions = [];
+
+      const currentQ = quizQuestions[index];
+      const currentPrize = prizeLevels[index];
+
+      document.getElementById('display-qnum').textContent = `Pertanyaan ${index + 1} dari 15`;
+      document.getElementById('display-topic').textContent = currentQ.topic;
+      document.getElementById('display-prize').textContent = currentPrize.prize;
+      document.getElementById('question-text').textContent = currentQ.question;
+
+      for (let i = 0; i < 4; i++) {
+        const btn = document.getElementById(`opt-${i}`);
+        const text = document.getElementById(`opt-text-${i}`);
+        btn.className = 'hex-box answer-btn';
+        btn.disabled = false;
+        text.textContent = currentQ.options[i];
+      }
+
+      document.getElementById('final-panel').style.display = 'none';
+      document.getElementById('explanation-card').style.display = 'none';
+
+      updateLadderHighlight();
+      playAudio(CONFIG_ASSETS_AUDIO.questionReveal);
+      startHeartbeatSound();
+      startTimer();
+    }
+
+    function selectAnswer(index) {
+      if (gameState.isLocked || gameState.hiddenOptions.includes(index)) return;
+
+      gameState.selectedOption = index;
+      playAudio(CONFIG_ASSETS_AUDIO.selectOption);
+
+      for (let i = 0; i < 4; i++) {
+        document.getElementById(`opt-${i}`).classList.remove('selected');
+      }
+      document.getElementById(`opt-${index}`).classList.add('selected');
+
+      const letter = ['A', 'B', 'C', 'D'][index];
+      document.getElementById('final-prompt').textContent = `Kunci Pilihan ${letter} sebagai Jawaban Akhir?`;
+      document.getElementById('final-panel').style.display = 'block';
+    }
+
+    function cancelSelection() {
+      if (gameState.isLocked) return;
+      gameState.selectedOption = null;
+      for (let i = 0; i < 4; i++) {
+        document.getElementById(`opt-${i}`).classList.remove('selected');
+      }
+      document.getElementById('final-panel').style.display = 'none';
+    }
+
+    function confirmFinalAnswer() {
+      if (gameState.selectedOption === null || gameState.isLocked) return;
+
+      stopTimer();
+      stopHeartbeatSound();
+      gameState.isLocked = true;
+      document.getElementById('final-panel').style.display = 'none';
+      playAudio(CONFIG_ASSETS_AUDIO.lockAnswer);
+
+      for (let i = 0; i < 4; i++) {
+        document.getElementById(`opt-${i}`).disabled = true;
+      }
+
+      const selectedBtn = document.getElementById(`opt-${gameState.selectedOption}`);
+      selectedBtn.classList.add('blinking');
+
+      setTimeout(() => {
+        resolveAnswer();
+      }, 2000);
+    }
+
+    function resolveAnswer() {
+      const qIndex = gameState.currentIndex;
+      const question = quizQuestions[qIndex];
+      const selected = gameState.selectedOption;
+      const correct = question.correct;
+
+      const selectedBtn = document.getElementById(`opt-${selected}`);
+      const correctBtn = document.getElementById(`opt-${correct}`);
+      selectedBtn.classList.remove('blinking');
+
+      if (selected === correct) {
+        selectedBtn.classList.add('correct');
+        const isMilestone = prizeLevels[qIndex].milestone || prizeLevels[qIndex].jackpot;
+        
+        if (isMilestone) {
+          playAudio(CONFIG_ASSETS_AUDIO.correctMilestone);
+        } else {
+          playAudio(CONFIG_ASSETS_AUDIO.correctNormal);
+        }
+
+        gameState.currentWalkaway = prizeLevels[qIndex].val;
+        if (prizeLevels[qIndex].milestone) {
+          gameState.currentGuaranteed = prizeLevels[qIndex].val;
+        }
+
+        showExplanation(question.explanation);
+      } else {
+        selectedBtn.classList.add('wrong');
+        correctBtn.classList.add('correct');
+        playAudio(CONFIG_ASSETS_AUDIO.wrongAnswer);
+
+        setTimeout(() => {
+          finishGameAndShowCertificate(false);
+        }, 2500);
+      }
+    }
+
+    function showExplanation(text) {
+      const card = document.getElementById('explanation-card');
+      document.getElementById('explanation-text').textContent = text;
+      card.style.display = 'block';
+    }
+
+    function nextQuestion() {
+      if (gameState.currentIndex === 14) {
+        playAudio(CONFIG_ASSETS_AUDIO.jackpotWin);
+        finishGameAndShowCertificate(true);
+      } else {
+        loadQuestion(gameState.currentIndex + 1);
+      }
+    }
+
+    function useFiftyFifty() {
+      if (!gameState.lifelines.fifty || gameState.isLocked) return;
+      gameState.lifelines.fifty = false;
+      document.getElementById('ll-fifty').disabled = true;
+      playAudio(CONFIG_ASSETS_AUDIO.lifelineUsed);
+
+      const correct = quizQuestions[gameState.currentIndex].correct;
+      let wrongIndices = [0, 1, 2, 3].filter(idx => idx !== correct);
+      wrongIndices.sort(() => Math.random() - 0.5);
+      const toEliminate = wrongIndices.slice(0, 2);
+
+      toEliminate.forEach(idx => {
+        document.getElementById(`opt-${idx}`).classList.add('hidden-option');
+        gameState.hiddenOptions.push(idx);
+      });
+
+      if (gameState.selectedOption !== null && toEliminate.includes(gameState.selectedOption)) {
+        cancelSelection();
+      }
+    }
+
+    function usePhoneAFriend() {
+      if (!gameState.lifelines.phone || gameState.isLocked) return;
+      gameState.lifelines.phone = false;
+      document.getElementById('ll-phone').disabled = true;
+      playAudio(CONFIG_ASSETS_AUDIO.lifelineUsed);
+
+      const q = quizQuestions[gameState.currentIndex];
+      document.getElementById('phone-dialogue-text').textContent = `"${q.phoneHint}"`;
+      openModal('modal-phone');
+    }
+
+    function useAskAudience() {
+      if (!gameState.lifelines.audience || gameState.isLocked) return;
+      gameState.lifelines.audience = false;
+      document.getElementById('ll-audience').disabled = true;
+      playAudio(CONFIG_ASSETS_AUDIO.lifelineUsed);
+
+      const correct = quizQuestions[gameState.currentIndex].correct;
+      let pCorrect = Math.floor(Math.random() * 18) + 68;
+      let remaining = 100 - pCorrect;
+      
+      let percentages = [0, 0, 0, 0];
+      percentages[correct] = pCorrect;
+
+      let wrongIndices = [0, 1, 2, 3].filter(i => i !== correct);
+      let r1 = Math.floor(Math.random() * (remaining - 4));
+      let r2 = Math.floor(Math.random() * (remaining - r1 - 2));
+      let r3 = remaining - r1 - r2;
+
+      percentages[wrongIndices[0]] = r1;
+      percentages[wrongIndices[1]] = r2;
+      percentages[wrongIndices[2]] = r3;
+
+      openModal('modal-audience');
+
+      for (let i = 0; i < 4; i++) {
+        const bar = document.getElementById(`aud-bar${i}`);
+        const text = document.getElementById(`aud-p${i}`);
+        bar.style.height = '0%';
+        text.textContent = '0%';
+        setTimeout(() => {
+          bar.style.height = `${percentages[i]}%`;
+          text.textContent = `${percentages[i]}%`;
+        }, 150);
+      }
+    }
+
+    function openModal(id) { document.getElementById(id).style.display = 'flex'; }
+    function closeModal(id) { document.getElementById(id).style.display = 'none'; }
+
+    function walkAway() {
+      if (gameState.isLocked) return;
+      if (gameState.currentIndex === 0) {
+        alert("Anda belum menyelesaikan soal pertama.");
+        return;
+      }
+      stopTimer();
+      finishGameAndShowCertificate(false, gameState.currentWalkaway);
+    }
+
+    function finishGameAndShowCertificate(isJackpot = false, walkAmount = null, isTimeout = false) {
+      stopTimer();
+      stopHeartbeatSound();
+
+      const endScreen = document.getElementById('end-screen');
+      endScreen.style.display = 'flex';
+
+      let earnedPrize = 0;
+      let stageDescription = "";
+      let rankTag = "";
+
+      if (isJackpot) {
+        earnedPrize = 1000000000;
+        stageDescription = "Meraih pencapaian TERTINGGI dengan menuntaskan 15/15 Pertanyaan Sempurna!";
+        rankTag = "Grand Master Matematika 1 Miliar";
+      } else if (walkAmount !== null) {
+        earnedPrize = walkAmount;
+        stageDescription = `Memutuskan berhenti secara bijak pada Pertanyaan ke-${gameState.currentIndex + 1} dengan membawa pulang hadiah aman.`;
+        rankTag = getRankByPrize(earnedPrize);
+      } else {
+        earnedPrize = gameState.currentGuaranteed;
+        if (earnedPrize > 0) {
+          stageDescription = `Menyelesaikan kuis dan berhasil mengamankan Titik Tonggak Milestone Resmi.`;
+        } else {
+          stageDescription = `Telah berjuang dan menunjukkan ketekunan belajar di panggung Kuis 1 Miliar.`;
+        }
+        rankTag = getRankByPrize(earnedPrize);
+      }
+
+      document.getElementById('cert-student-name').textContent = gameState.studentName;
+      document.getElementById('cert-student-class').textContent = gameState.studentClass;
+      document.getElementById('cert-prize-val').textContent = formatRupiah(earnedPrize);
+      document.getElementById('cert-rank-tag').textContent = rankTag;
+
+      const today = new Date();
+      const options = { day: 'numeric', month: 'long', year: 'numeric' };
+      document.getElementById('cert-date').textContent = today.toLocaleDateString('id-ID', options);
+
+      document.getElementById('cert-description').innerHTML = `
+        Atas partisipasi dan dedikasi luar biasa dalam menyelesaikan tantangan penalaran matematika pada materi 
+        <strong>Bilangan Cacah Sampai 1.000.000</strong>. ${stageDescription}
+      `;
+    }
+
+    function getRankByPrize(val) {
+      if (val >= 1000000000) return "Grand Master Matematika";
+      if (val >= 500000000) return "Pakar Matematika Utama";
+      if (val >= 125000000) return "Cendekiawan Mahir";
+      if (val >= 32000000) return "Juara Titik Aman II (32 Juta)";
+      if (val >= 4000000) return "Pejuang Tangguh";
+      if (val >= 1000000) return "Juara Titik Aman I (1 Juta)";
+      return "Bintang Harapan Matematika";
+    }
+
+    function formatRupiah(number) {
+      return "Rp " + number.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ".");
+    }
+
+    function restartGame() {
+      document.getElementById('end-screen').style.display = 'none';
+      document.getElementById('splash-cover-screen').style.display = 'flex';
+      document.getElementById('splash-cover-screen').style.opacity = '1';
+      document.getElementById('splash-cover-screen').style.transform = 'scale(1)';
+      document.getElementById('input-student-name').value = '';
+      document.getElementById('input-student-class').value = '';
+    }
+
+    function toggleMobileLadder() {
+      const ladder = document.getElementById('ladder-container');
+      if (ladder.style.display === 'flex') {
+        ladder.style.display = 'none';
+      } else {
+        ladder.style.display = 'flex';
+        ladder.style.position = 'fixed';
+        ladder.style.top = '70px';
+        ladder.style.right = '10px';
+        ladder.style.zIndex = '95';
+        ladder.style.maxHeight = '80vh';
+      }
+    }
+
+    window.addEventListener('DOMContentLoaded', () => {
+      initAssetsImages();
+    });
+  </script>
+</body>
+</html>
